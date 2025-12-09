@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # 升级到了 v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5 # 升级到了 v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install flet
+
+      - name: Setup Java
+        uses: actions/setup-java@v4 # 升级到了 v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+
+      - name: Build APK
+        run: |
+          flet build apk --verbose
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4  # <--- 这里是关键修复！必须是 v4
+        with:
+          name: focus-app-release
+          path: build/apk/app-release.apk
