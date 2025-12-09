@@ -40,11 +40,10 @@ jobs:
           channel: 'stable'
 
       # 5. 开始打包
+      
       - name: Build APK
         run: |
-          # 这里的命令会去读你的 requirements.txt
-          flet build apk --no-android-splash
-
+          flet build apk --project-name unilife_mate --no-android-splash
       # 6. 上传结果
       - name: Upload APK
         uses: actions/upload-artifact@v4
